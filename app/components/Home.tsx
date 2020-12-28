@@ -90,8 +90,6 @@ export default function Home(): React.ReactNode {
     <div data-tid="container">
       <Header />
       <Tabs />
-      <Heading>Home</Heading>
-      <Link to={routes.COUNTER}>to Counter</Link>
     </div>
   );
 }
