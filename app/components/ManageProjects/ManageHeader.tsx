@@ -17,6 +17,7 @@ export const ManageHeader = (props: Props) => {
     <Box
       bg="gray"
       width="100%"
+      height="60px"
       display="flex"
       justifyContent="space-between"
       borderBottom="1px solid gray"

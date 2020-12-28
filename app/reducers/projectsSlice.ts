@@ -8,6 +8,7 @@ export type Project = {
   icon: {
     type: 'standard' | 'custom';
     color: string;
+    name: string;
   };
   tabs: string[];
 };
@@ -16,13 +17,13 @@ const currentSlice = createSlice({
   name: 'projects',
   initialState: { projects: <Project[]>[], current: 0 },
   reducers: {
-    changeProject: (state, action) => {
+    changeProject: (state, action: number) => {
       state.current = action.payload;
     },
-    addProject: (state, action) => {
+    addProject: (state, action: Project) => {
       state.projects = [...state.projects, action.payload];
     },
-    removeProject: (state, action) => {
+    removeProject: (state, action: number) => {
       state.projects = [
         ...state.projects.slice(0, action.payload),
         ...state.projects.slice(action.payload, state.projects.length),

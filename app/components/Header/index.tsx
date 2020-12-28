@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleEditMode, selectEditMode } from '../../reducers/currentSlice';
-import ROUTES from '../../constants/routes.json';
+import ROUTES from '../../constants/routes';
 
 interface Props {}
 
