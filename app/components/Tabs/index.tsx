@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Box, Button, Text } from '@chakra-ui/react';
-import CurrentTab from '../CurrentTab';
+import { CurrentTab } from '../CurrentTab';
 import { selectCurrentProject } from '../../reducers/projectsSlice';
 import { changeTab } from '../../reducers/currentSlice';
 
@@ -16,7 +16,7 @@ export const Tabs = (props: Props) => {
       {/* Tabs */}
       <Box>
         {tabs?.map((tab, index) => (
-          <Button onClick={() => dispatch(changeTab(index))}>
+          <Button key={index} onClick={() => dispatch(changeTab(index))}>
             <Text>{tab}</Text>
           </Button>
         ))}

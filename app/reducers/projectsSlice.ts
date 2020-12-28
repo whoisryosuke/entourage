@@ -2,9 +2,19 @@ import { createSlice } from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from '../store';
 
+export type Project = {
+  name: string;
+  directory: string;
+  icon: {
+    type: 'standard' | 'custom';
+    color: string;
+  };
+  tabs: string[];
+};
+
 const currentSlice = createSlice({
   name: 'projects',
-  initialState: { projects: <any[]>[], current: 0 },
+  initialState: { projects: <Project[]>[], current: 0 },
   reducers: {
     changeProject: (state, action) => {
       state.current = action.payload;

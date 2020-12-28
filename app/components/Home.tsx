@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import routes from '../constants/routes.json';
 import storage from 'electron-json-storage';
 import { Heading } from '@chakra-ui/react';
-import Header from './Header';
-import Tabs from './Tabs';
+import { Header } from './Header';
+import { Tabs } from './Tabs';
 
 export default function Home(): React.ReactNode {
   storage.set('test', {
