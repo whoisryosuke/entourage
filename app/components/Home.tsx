@@ -1,20 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import fs from 'fs';
-import { exec } from 'child_process';
-import styled from 'styled-components';
 import routes from '../constants/routes.json';
-import styles from './Home.css';
 import storage from 'electron-json-storage';
-import { toggle, light, dark } from './ThemeProvider/themeSlice';
-
-const Header = styled.h2`
-  color: ${({ theme }) => theme.colors.text};
-`;
+import { Heading } from '@chakra-ui/react';
+import Header from './Header';
+import Tabs from './Tabs';
 
 export default function Home(): React.ReactNode {
-  const dispatch = useDispatch();
   storage.set('test', {
     directory: '/Users/user/folder/',
     name: 'Alpha Project',
@@ -95,11 +87,10 @@ export default function Home(): React.ReactNode {
   //   console.log(`stdout: ${stdout}`);
   // });
   return (
-    <div className={styles.container} data-tid="container">
-      <Header>Home</Header>
-      <button onClick={() => dispatch(toggle())}>Toggle</button>
-      <button onClick={() => dispatch(light())}>Light</button>
-      <button onClick={() => dispatch(dark())}>Dark</button>
+    <div data-tid="container">
+      <Header />
+      <Tabs />
+      <Heading>Home</Heading>
       <Link to={routes.COUNTER}>to Counter</Link>
     </div>
   );
