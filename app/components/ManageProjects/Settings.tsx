@@ -1,7 +1,11 @@
 import React, { useEffect } from 'react';
 import { Box, Button, Input, Stack, Select, Text } from '@chakra-ui/react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectProjects, updateProject } from '../../reducers/projectsSlice';
+import {
+  selectProjects,
+  deleteProject,
+  updateProject,
+} from '../../reducers/projectsSlice';
 
 interface Props {
   currentProject: number;
@@ -35,6 +39,10 @@ export const Settings = ({ currentProject }: Props) => {
         },
       })
     );
+  };
+
+  const handleDelete = () => {
+    dispatch(deleteProject(currentProject));
   };
 
   useEffect(() => {
@@ -135,7 +143,12 @@ export const Settings = ({ currentProject }: Props) => {
               />
             </Stack>
           )}
-          <Button onClick={submitForm}>Save Project</Button>
+          <Stack spacing={2}>
+            <Button onClick={submitForm}>Save Project</Button>
+            <Button colorScheme="red" onClick={handleDelete}>
+              Delete Project
+            </Button>
+          </Stack>
         </>
       )}
     </Box>

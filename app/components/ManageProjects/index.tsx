@@ -38,6 +38,7 @@ export const ManageProjects = (props: Props) => {
         <Box
           id="Sidebar"
           display="flex"
+          flex="1"
           flexDirection="column"
           position="sticky"
           top="0"
@@ -50,7 +51,7 @@ export const ManageProjects = (props: Props) => {
           <Button>Duplicate Project</Button>
           <Button>Import Project</Button>
         </Box>
-        <Box id="Settings">
+        <Box id="Settings" flex="3">
           <Settings currentProject={currentProject} />
         </Box>
       </Box>

@@ -23,8 +23,10 @@ export const ManageHeader = (props: Props) => {
       borderBottom="1px solid gray"
     >
       <Box display="flex" p={2}>
-        <BsGear />
-        <Heading>Manage Projects</Heading>
+        <BsGear style={{ width: '32px', height: '32px', marginTop: '4px' }} />
+        <Heading ml={3} size="lg">
+          Manage Projects
+        </Heading>
       </Box>
       <Box p={2}>
         <Button leftIcon={<BiCheckCircle />} onClick={handleDoneEditing}>
