@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import { Box } from '@chakra-ui/react';
 import React from 'react';
 
@@ -20,15 +21,16 @@ export const DropArea = ({ gridWidth, gridHeight }: Props) => {
       left={0}
       opacity="50%"
     >
-      {rows.map((row) => (
-        <Box width="100%" display="flex">
-          {row.map((column) => (
+      {rows.map((row, rowIndex) => (
+        <Box key={rowIndex} width="100%" display="flex">
+          {row.map((column, index) => (
             <Box
+              key={`${rowIndex}-${index}`}
               width={gridWidth}
               height={gridHeight}
               bgColor="rgba(0,50,0,0.5)"
               border="1px solid rgba(0,50,0,0.7)"
-            ></Box>
+            />
           ))}
         </Box>
       ))}

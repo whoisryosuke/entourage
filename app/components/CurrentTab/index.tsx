@@ -1,4 +1,4 @@
-import React, { useRef, useState, useLayoutEffect } from 'react';
+import React, { useCallback, useRef, useState, useLayoutEffect } from 'react';
 import { Box, Button, Text } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { selectCurrentTab } from '../../reducers/currentSlice';
@@ -86,7 +86,7 @@ export const CurrentTab = (props: Props) => {
     },
   ];
 
-  const handleResize = () => {
+  const handleResize = useCallback(() => {
     const offset = containerRef.current?.getBoundingClientRect();
     const subtractOffset = offset?.top ?? 300;
     const gridItemWidth = window.innerWidth / 16;
@@ -95,17 +95,17 @@ export const CurrentTab = (props: Props) => {
       width: gridItemWidth,
       height: gridItemHeight,
     });
-    console.log('calc', offset, gridItemSize, window.innerHeight);
-  };
+  }, [containerRef]);
 
   useLayoutEffect(() => {
+    handleResize();
     window.addEventListener('onload', handleResize);
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('onload', handleResize);
       window.removeEventListener('resize', handleResize);
     };
-  }, [containerRef]);
+  }, [handleResize]);
 
   return (
     <Box ref={containerRef} position="relative" width="100%">
@@ -118,6 +118,7 @@ export const CurrentTab = (props: Props) => {
       {/* Blocks */}
       {tab?.map(({ name, position }) => (
         <Box
+          key={name}
           position="absolute"
           width={gridItemSize.width * position.width}
           height={gridItemSize.height * position.height}

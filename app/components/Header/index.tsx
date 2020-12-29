@@ -4,17 +4,28 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleEditMode, selectEditMode } from '../../reducers/currentSlice';
-import ROUTES from '../../constants/routes';
+import {
+  changeProject,
+  selectProjects,
+  selectCurrentProjectID,
+} from '../../reducers/projectsSlice';
+import ROUTES from '../../constants/routes.json';
 
 interface Props {}
 
 export const Header = (props: Props) => {
   const [redirect, setRedirect] = useState(false);
   const editMode = useSelector(selectEditMode);
+  const currentProject = useSelector(selectCurrentProjectID);
+  const projects = useSelector(selectProjects);
   const dispatch = useDispatch();
 
   const handleManageProjects = () => {
     setRedirect(true);
+  };
+
+  const handleProjectSelect = ({ target }) => {
+    dispatch(changeProject(target.value));
   };
   return (
     <Box
@@ -26,10 +37,17 @@ export const Header = (props: Props) => {
     >
       <Box display="flex">
         <Box display="flex" p={2}>
-          <Select minWidth="200px" value="option1" mr={3}>
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
+          <Select
+            minWidth="200px"
+            value={currentProject}
+            mr={3}
+            onChange={handleProjectSelect}
+          >
+            {projects?.map((project, index) => (
+              <option key={project.name} value={index}>
+                {project.name}
+              </option>
+            ))}
           </Select>
           <Button
             minWidth="180px"
