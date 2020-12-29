@@ -30,71 +30,50 @@ const generateCoordinates = (blocks) => {
     width: 2,
     height: 2,
   };
+  // Create arrays for all grid positions and mark all as unused for now
+  const freeXSlots = new Array(16).fill(true);
+  const freeYSlots = new Array(8).fill(true);
+
   console.log('start position', startPosition);
+  console.log('free positions', freeXSlots, freeYSlots);
+  // Loop through blocks and mark grid positions as used
   blocks.map(({ position }) => {
-    // Find the min and max of each block
-    const surfaceArea = {
-      x: {
-        min: position.x,
-        max: position.x + position.width,
-      },
-      y: {
-        min: position.y,
-        max: position.y + position.height,
-      },
-    };
-
-    // Mutate position as needed
-    // Check if x fall within range of this block
-    if (surfaceArea.x.min >= startPosition.x <= surfaceArea.x.max) {
-      console.log('new block inside block X', surfaceArea);
-      // Check if exceeds max (width = 16, height = 8)
-      const blockRight = surfaceArea.x.max + position.width;
-      if (blockRight + startPosition.width > 16) {
-        // Check if it can be placed on other side
-        const blockLeft = surfaceArea.x.min - position.width;
-        if (blockLeft - startPosition.width < 0) {
-          // Adjust starting y to be higher/lower -- maybe rerun this recursive?
-          // Check range of current block and add/substract 1 (if min/max of canvas is reach)
-        }
-        startPosition = {
-          ...startPosition,
-          x: blockLeft,
-        };
-        return;
-      }
-      startPosition = {
-        ...startPosition,
-        x: blockRight,
-      };
-      return;
+    for (let i = position.x; i <= position.x + position.width; i++) {
+      console.log('position taken', i);
+      freeXSlots[i] = false;
     }
-
-    // Check if y fall within range of this block
-    if (surfaceArea.y.min >= startPosition.y <= surfaceArea.y.max) {
-      console.log('new block inside block Y', surfaceArea);
-      // Check if exceeds max (width = 16, height = 8)
-      const blockDown = surfaceArea.y.max + position.height;
-      if (blockDown + startPosition.height > 16) {
-        // Check if it can be placed on other side
-        const blockUp = surfaceArea.y.min - position.height;
-        if (blockUp - startPosition.height < 0) {
-          // Adjust starting y to be higher/lower -- maybe rerun this recursive?
-          // Check range of current block and add/substract 1 (if min/max of canvas is reach)
-        }
-        startPosition = {
-          ...startPosition,
-          x: blockUp,
-        };
-        return;
-      }
-      startPosition = {
-        ...startPosition,
-        x: blockDown,
-      };
+    for (let i = position.y; i <= position.y + position.height; i++) {
+      freeYSlots[i] = false;
     }
   });
 
+  // Find first x and see if it works
+  const firstX = freeXSlots.findIndex((item) => item === true);
+  console.log(
+    'first x index',
+    firstX !== null && firstX + startPosition.width <= 16
+  );
+  if (firstX !== null && firstX + startPosition.width <= 16) {
+    startPosition = {
+      ...startPosition,
+      x: firstX,
+    };
+  } else {
+    throw new Error('No free slots horizontally');
+  }
+
+  // Find first y and see if it works
+  const firstY = freeYSlots.findIndex((item) => item === true);
+  if (firstY !== null && firstY + startPosition.height <= 8) {
+    startPosition = {
+      ...startPosition,
+      y: firstY,
+    };
+  } else {
+    throw new Error('No free slots vertically');
+  }
+
+  console.log('updated free positions', freeXSlots, freeYSlots);
   console.log('new position', startPosition);
   return startPosition;
 };
