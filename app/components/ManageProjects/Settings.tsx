@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { Box, Input, Stack, Select, Text } from '@chakra-ui/react';
+import { Box, Button, Input, Stack, Select, Text } from '@chakra-ui/react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectProjects } from '../../reducers/projectsSlice';
+import { selectProjects, updateProject } from '../../reducers/projectsSlice';
 
 interface Props {
   currentProject: number;
@@ -9,20 +9,39 @@ interface Props {
 
 export const Settings = ({ currentProject }: Props) => {
   const [formData, setFormData] = React.useState({});
-  const handleChange = (event) =>
-    setFormData((prevForm) => ({
-      ...prevForm,
-      [event.target.name]: event.target.value,
-    }));
+  const dispatch = useDispatch();
   const projects = useSelector(selectProjects);
   const project = projects[currentProject];
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
+  };
+  const submitForm = () => {
+    dispatch(
+      updateProject({
+        id: currentProject,
+        project: {
+          name: formData.name,
+          directory: formData.directory,
+          icon: {
+            type: formData.iconType,
+            color: formData.iconColor,
+            name: formData.iconName,
+          },
+        },
+      })
+    );
+  };
 
   useEffect(() => {
     // Sync form data with Redux
     if (project)
       setFormData({
         name: project.name,
-        directory: project.directory,
         directory: project.directory,
         iconType: project.icon.type,
         iconColor: project.icon.color,
@@ -116,6 +135,7 @@ export const Settings = ({ currentProject }: Props) => {
               />
             </Stack>
           )}
+          <Button onClick={submitForm}>Save Project</Button>
         </>
       )}
     </Box>

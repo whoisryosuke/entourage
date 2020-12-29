@@ -13,6 +13,11 @@ export type Project = {
   tabs: string[];
 };
 
+type UpdateProject = {
+  id: number;
+  project: Project;
+};
+
 const currentSlice = createSlice({
   name: 'projects',
   initialState: { projects: <Project[]>[], current: 0 },
@@ -23,10 +28,20 @@ const currentSlice = createSlice({
     addProject: (state, action: Project) => {
       state.projects = [...state.projects, action.payload];
     },
+    updateProject: (state, action: UpdateProject) => {
+      const projects = [...state.projects];
+      const newProject = {
+        ...state.projects[action.payload.id],
+        ...action.payload.project,
+      };
+      projects[action.payload.id] = newProject;
+
+      state.projects = [...projects];
+    },
     removeProject: (state, action: number) => {
       state.projects = [
         ...state.projects.slice(0, action.payload),
-        ...state.projects.slice(action.payload, state.projects.length),
+        ...state.projects.slice(action.payload + 1),
       ];
     },
   },
@@ -36,6 +51,7 @@ export const {
   addProject,
   removeProject,
   changeProject,
+  updateProject,
 } = currentSlice.actions;
 
 export default currentSlice.reducer;
