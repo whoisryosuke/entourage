@@ -1,8 +1,9 @@
 import { Button, Box, Select } from '@chakra-ui/react';
-import { BsGear, BsLayoutWtf } from 'react-icons/bs';
+import { BsGear, BsPlus, BsLayoutWtf } from 'react-icons/bs';
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { AddBlockMenu } from '../AddBlockMenu';
 import { toggleEditMode, selectEditMode } from '../../reducers/currentSlice';
 import {
   changeProject,
@@ -49,13 +50,17 @@ export const Header = (props: Props) => {
               </option>
             ))}
           </Select>
-          <Button
-            minWidth="180px"
-            leftIcon={<BsGear />}
-            onClick={handleManageProjects}
-          >
-            Manage Projects
-          </Button>
+          {editMode ? (
+            <AddBlockMenu />
+          ) : (
+            <Button
+              minWidth="180px"
+              leftIcon={<BsGear />}
+              onClick={handleManageProjects}
+            >
+              Manage Projects
+            </Button>
+          )}
         </Box>
         <Box>{/* Other buttons */}</Box>
       </Box>
