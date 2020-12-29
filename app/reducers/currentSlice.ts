@@ -10,7 +10,7 @@ export type ActionTypes =
   | 'todo'
   | 'note';
 
-export type Tab = {
+export type Block = {
   name: string;
   description: string;
   action: {
@@ -33,9 +33,23 @@ export type Tab = {
   };
 };
 
+export type Tab = {
+  name: string;
+  blocks: Block[];
+};
+
 const currentSlice = createSlice({
   name: 'current',
-  initialState: { edit: false, tab: 0, tabs: <Tab[]>[] },
+  initialState: {
+    edit: false,
+    tab: 0,
+    tabs: <Tab[]>[
+      {
+        name: 'Test',
+        blocks: [],
+      },
+    ],
+  },
   reducers: {
     changeTab: (state, action) => {
       state.tab = action.payload;
@@ -46,10 +60,24 @@ const currentSlice = createSlice({
     toggleEditMode: (state) => {
       state.edit = !state.edit;
     },
+    addBlockToTab: (state, action) => {
+      state.tabs = [
+        {
+          ...state.tabs[0],
+          blocks: [...state.tabs[0].blocks, action.payload],
+        },
+        ...state.tabs.slice(0),
+      ];
+    },
   },
 });
 
-export const { changeTab, updateTabs, toggleEditMode } = currentSlice.actions;
+export const {
+  changeTab,
+  updateTabs,
+  toggleEditMode,
+  addBlockToTab,
+} = currentSlice.actions;
 
 export default currentSlice.reducer;
 
