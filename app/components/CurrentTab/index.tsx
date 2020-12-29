@@ -123,8 +123,8 @@ export const CurrentTab = (props: Props) => {
           position="absolute"
           width={gridItemSize.width * position.width}
           height={gridItemSize.height * position.height}
-          top={gridItemSize.height * position.x}
-          left={gridItemSize.width * position.y}
+          top={gridItemSize.height * position.y}
+          left={gridItemSize.width * position.x}
         >
           <Text>{name}</Text>
         </Box>
