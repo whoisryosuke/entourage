@@ -31,8 +31,8 @@ const generateCoordinates = (blocks) => {
     height: 2,
   };
   // Create arrays for all grid positions and mark all as unused for now
-  const freeXSlots = new Array(16).fill(true);
-  const freeSlots = new Array(8).fill(freeXSlots);
+  const freeSlots = [...Array(8)].map((item) => [...Array(16)].fill(true));
+  // const freeSlots = new Array(8).fill(new Array(16).fill(true));
 
   console.log('blocks', blocks);
   console.log('start position', startPosition);
@@ -55,6 +55,7 @@ const generateCoordinates = (blocks) => {
         console.log(
           'position taken',
           position,
+          freeSlots,
           freeSlots[leftIndex],
           rightIndex,
           leftIndex
@@ -89,7 +90,7 @@ const generateCoordinates = (blocks) => {
       // If we got it, and it's within the width
       // Make it the new position
       // @TODO: Check if on bottom, and make height 1
-      if (!(indexFound <= 0) && indexFound <= 16) {
+      if (!(indexFound < 0) && indexFound <= 16) {
         found = true;
         console.log('returning something', index, indexFound);
         startPosition = {
