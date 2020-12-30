@@ -32,49 +32,86 @@ const generateCoordinates = (blocks) => {
   };
   // Create arrays for all grid positions and mark all as unused for now
   const freeXSlots = new Array(16).fill(true);
-  const freeYSlots = new Array(8).fill(true);
+  const freeSlots = new Array(8).fill(freeXSlots);
 
+  console.log('blocks', blocks);
   console.log('start position', startPosition);
-  console.log('free positions', freeXSlots, freeYSlots);
+  console.log('free positions', freeSlots);
   // Loop through blocks and mark grid positions as used
   blocks.map(({ position }) => {
-    for (let i = position.x; i <= position.x + position.width; i++) {
-      console.log('position taken', i);
-      freeXSlots[i] = false;
-    }
-    for (let i = position.y; i <= position.y + position.height; i++) {
-      freeYSlots[i] = false;
+    // We loop through the min and max X values
+    // And inside that, do same for Y
+    // To get X,Y (or Y,X in this case) and mark slot as "used" in array
+    for (
+      let rightIndex = position.x;
+      rightIndex <= position.x + position.width - 1;
+      rightIndex++
+    ) {
+      for (
+        let leftIndex = position.y;
+        leftIndex <= position.y + position.height - 1;
+        leftIndex++
+      ) {
+        console.log(
+          'position taken',
+          position,
+          freeSlots[leftIndex],
+          rightIndex,
+          leftIndex
+        );
+        freeSlots[leftIndex][rightIndex] = false;
+      }
     }
   });
 
   // Find first x and see if it works
-  const firstX = freeXSlots.findIndex((item) => item === true);
-  console.log(
-    'first x index',
-    firstX !== null && firstX + startPosition.width <= 16
-  );
-  if (firstX !== null && firstX + startPosition.width <= 16) {
-    startPosition = {
-      ...startPosition,
-      x: firstX,
-    };
-  } else {
-    throw new Error('No free slots horizontally');
-  }
+  // const firstX = freeXSlots.findIndex((item) => item === true);
+  // console.log(
+  //   'first x index',
+  //   firstX !== null && firstX + startPosition.width <= 16
+  // );
+  // if (firstX !== null && firstX + startPosition.width <= 16) {
+  //   startPosition = {
+  //     ...startPosition,
+  //     x: firstX,
+  //   };
+  // } else {
+  //   throw new Error('No free slots horizontally');
+  // }
 
   // Find first y and see if it works
-  const firstY = freeYSlots.findIndex((item) => item === true);
-  if (firstY !== null && firstY + startPosition.height <= 8) {
-    startPosition = {
-      ...startPosition,
-      y: firstY,
-    };
-  } else {
-    throw new Error('No free slots vertically');
-  }
+  let found = false;
+  freeSlots.forEach((row, index) => {
+    if (!found) {
+      // Go through the row and see if any item is true
+      const indexFound = row.findIndex((item) => item === true);
+      console.log('did we find an index?', index, indexFound);
+      // If we got it, and it's within the width
+      // Make it the new position
+      // @TODO: Check if on bottom, and make height 1
+      if (!(indexFound <= 0) && indexFound <= 16) {
+        found = true;
+        console.log('returning something', index, indexFound);
+        startPosition = {
+          ...startPosition,
+          x: indexFound,
+          y: index,
+        };
+      }
+    }
+  });
+  console.log('free slots', freeSlots, startPosition);
+  // if (firstY !== null && firstY + startPosition.height <= 8) {
+  //   startPosition = {
+  //     ...startPosition,
+  //     y: firstY,
+  //   };
+  // } else {
+  //   throw new Error('No free slots vertically');
+  // }
 
-  console.log('updated free positions', freeXSlots, freeYSlots);
-  console.log('new position', startPosition);
+  // console.log('updated free positions', freeXSlots, freeYSlots);
+  // console.log('new position', startPosition);
   return startPosition;
 };
 
