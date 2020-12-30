@@ -3,6 +3,7 @@ import { Box, Button, Text } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { selectCurrentTab } from '../../reducers/currentSlice';
 import DropArea from '../DropArea';
+import Block from '../Block';
 
 interface Props {}
 
@@ -118,16 +119,16 @@ export const CurrentTab = (props: Props) => {
 
       {/* Blocks */}
       {tab?.blocks.map(({ name, position }) => (
-        <Box
+        <Block
           key={name}
-          position="absolute"
+          name={name}
           width={gridItemSize.width * position.width}
           height={gridItemSize.height * position.height}
           top={gridItemSize.height * position.y}
           left={gridItemSize.width * position.x}
         >
           <Text>{name}</Text>
-        </Box>
+        </Block>
       ))}
     </Box>
   );

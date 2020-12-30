@@ -45,3 +45,7 @@ export const BLOCK_SAMPLES = {
     data: 'Hello Note World',
   },
 };
+
+export const DRAG_TYPES = {
+  BLOCK: 'BLOCK',
+};
