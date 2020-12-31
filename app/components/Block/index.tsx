@@ -5,14 +5,18 @@ import { Box } from '@chakra-ui/react';
 import { useDrag, DragSourceMonitor } from 'react-dnd';
 import { DRAG_TYPES } from '../../constants/blocks';
 import { updateBlockPosition } from '../../reducers/currentSlice';
+import { checkAdjacentSlots } from '../AddBlockMenu';
 
 interface Props {
   name: string;
   width: number;
   height: number;
+  gridWidth: number;
+  gridHeight: number;
   top: number;
   left: number;
   index: number;
+  freeSlots: any;
   children: React.ReactNode;
 }
 
@@ -20,10 +24,13 @@ export const Block = ({
   name,
   width,
   height,
+  gridWidth,
+  gridHeight,
   index,
   top,
   left,
   children,
+  freeSlots,
   ...restProps
 }: Props) => {
   const dispatch = useDispatch();
@@ -33,11 +40,26 @@ export const Block = ({
       const dropResult = monitor.getDropResult();
       if (item && dropResult) {
         // @TODO: Check for collision and deny request if so
+        console.log(
+          'checking slots',
+          dropResult.index,
+          dropResult.row,
+          gridWidth,
+          gridHeight
+        );
+        const newSize = checkAdjacentSlots(
+          freeSlots,
+          dropResult.index,
+          dropResult.row,
+          gridWidth,
+          gridHeight
+        );
         // Not too necessary because blocks cover grid, so can't drop on blocked areas
         dispatch(
           updateBlockPosition({
             index,
             position: {
+              ...newSize,
               x: dropResult.index,
               y: dropResult.row,
             },

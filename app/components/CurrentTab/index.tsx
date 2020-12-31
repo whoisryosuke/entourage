@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentTab } from '../../reducers/currentSlice';
 import DropArea from '../DropArea';
 import Block from '../Block';
+import { generateSlots } from '../AddBlockMenu';
 
 interface Props {}
 
@@ -14,79 +15,6 @@ export const CurrentTab = (props: Props) => {
   });
   const containerRef = useRef<HTMLDivElement>(null);
   const tab = useSelector(selectCurrentTab);
-  // const tab = [
-  //   // Command Line Block
-  //   {
-  //     name: 'Start Server',
-  //     description: 'Starts the development server on port 8080',
-  //     action: {
-  //       type: 'command',
-  //       data: ['npm run dev', 'npm run lint'],
-  //       directory: '',
-  //       confirmation: false,
-  //     },
-  //     position: {
-  //       x: 0,
-  //       y: 0,
-  //       width: 2,
-  //       height: 2,
-  //     },
-  //     appearance: {
-  //       icon: {
-  //         type: 'standard',
-  //         color: '#F0F0F0',
-  //       },
-  //       highlight: '#F0F0F0',
-  //     },
-  //   },
-
-  //   // File Explorer
-  //   {
-  //     name: 'Project folder',
-  //     description: 'The primary folder',
-  //     action: {
-  //       type: 'file-explorer',
-  //       directory: '/projects/project-1/',
-  //     },
-  //     position: {
-  //       x: 2,
-  //       y: 0,
-  //       width: 2,
-  //       height: 2,
-  //     },
-  //     appearance: {
-  //       icon: {
-  //         type: 'standard',
-  //         color: '#F0F0F0',
-  //       },
-  //       highlight: '#F0F0F0',
-  //     },
-  //   },
-
-  //   // File Explorer
-  //   {
-  //     name: 'Project folder',
-  //     description: 'The primary folder',
-  //     action: {
-  //       type: 'file-explorer',
-  //       directory: '/projects/project-1/',
-  //     },
-  //     position: {
-  //       x: 4,
-  //       y: 0,
-  //       width: 2,
-  //       height: 2,
-  //     },
-  //     appearance: {
-  //       icon: {
-  //         type: 'standard',
-  //         color: '#F0F0F0',
-  //       },
-  //       highlight: '#F0F0F0',
-  //     },
-  //   },
-  // ];
-  console.log('current tab', tab);
 
   const handleResize = useCallback(() => {
     const offset = containerRef.current?.getBoundingClientRect();
@@ -109,6 +37,8 @@ export const CurrentTab = (props: Props) => {
     };
   }, [handleResize]);
 
+  const freeSlots = generateSlots(tab?.blocks ?? []);
+
   return (
     <Box ref={containerRef} position="relative" width="100%">
       {/* Drop Area */}
@@ -123,10 +53,13 @@ export const CurrentTab = (props: Props) => {
           key={name}
           name={name}
           index={index}
+          gridWidth={position.width}
+          gridHeight={position.height}
           width={gridItemSize.width * position.width}
           height={gridItemSize.height * position.height}
           top={gridItemSize.height * position.y}
           left={gridItemSize.width * position.x}
+          freeSlots={freeSlots}
         >
           <Text>{name}</Text>
         </Block>

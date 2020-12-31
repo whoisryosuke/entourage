@@ -27,7 +27,7 @@ interface Props {}
  * Checks if item intersects with any objects in grid
  * Returns a reduced width and height if intersection
  */
-const checkAdjacentSlots = (freeSlots, x, y, width, height) => {
+export const checkAdjacentSlots = (freeSlots, x, y, width, height) => {
   let foundWidth = false;
   let foundHeight = false;
   let finalWidth = 0;
@@ -40,30 +40,15 @@ const checkAdjacentSlots = (freeSlots, x, y, width, height) => {
   // (cause we can't have blocks overlap gaps)
   [...Array(initialWidth)].forEach((item, xIndex) => {
     if (!foundWidth) finalWidth += 1;
+    // We subtract 1 because the first row is technically checked by X
     [...Array(initialHeight - 1)].forEach((_, yIndex) => {
       if (!foundHeight) finalHeight += 1;
-      if (!freeSlots[yIndex + y][xIndex + x]) {
+      if (!freeSlots[yIndex + 1 + y][xIndex + x]) {
         foundHeight = true;
         foundWidth = true;
       }
     });
   });
-  // for (let xIndex = x; xIndex <= x + (width - 1); xIndex + 1) {
-  //   console.log('looping x', finalWidth);
-
-  //   // Loop through all Y slots
-  //   // for (let yIndex = y; yIndex < y + (height - 1); yIndex + 1) {
-  //   //   finalHeight += 1;
-  //   //   console.log('looping y', finalHeight);
-  //   //   if (!foundHeight && !freeSlots[yIndex][xIndex]) {
-  //   //     foundHeight = true;
-  //   //     foundWidth = true;
-  //   //   }
-  //   // }
-  //   if (foundWidth && foundHeight) break;
-  // }
-
-  console.log('final w/h', finalWidth, finalHeight);
 
   return {
     width: finalWidth,
@@ -71,20 +56,10 @@ const checkAdjacentSlots = (freeSlots, x, y, width, height) => {
   };
 };
 
-const generateCoordinates = (blocks) => {
-  let startPosition = {
-    x: 0,
-    y: 0,
-    width: 2,
-    height: 2,
-  };
+export const generateSlots = (blocks) => {
   // Create arrays for all grid positions and mark all as unused for now
   const freeSlots = [...Array(8)].map((item) => [...Array(16)].fill(true));
-  // const freeSlots = new Array(8).fill(new Array(16).fill(true));
 
-  console.log('blocks', blocks);
-  console.log('start position', startPosition);
-  console.log('free positions', freeSlots);
   // Loop through blocks and mark grid positions as used
   blocks.map(({ position }) => {
     // We loop through the min and max X values
@@ -100,33 +75,25 @@ const generateCoordinates = (blocks) => {
         leftIndex <= position.y + position.height - 1;
         leftIndex++
       ) {
-        console.log(
-          'position taken',
-          position,
-          freeSlots,
-          freeSlots[leftIndex],
-          rightIndex,
-          leftIndex
-        );
         freeSlots[leftIndex][rightIndex] = false;
       }
     }
   });
 
-  // Find first x and see if it works
-  // const firstX = freeXSlots.findIndex((item) => item === true);
-  // console.log(
-  //   'first x index',
-  //   firstX !== null && firstX + startPosition.width <= 16
-  // );
-  // if (firstX !== null && firstX + startPosition.width <= 16) {
-  //   startPosition = {
-  //     ...startPosition,
-  //     x: firstX,
-  //   };
-  // } else {
-  //   throw new Error('No free slots horizontally');
-  // }
+  return freeSlots;
+};
+
+export const generateCoordinates = (blocks, initialPosition = {}) => {
+  let startPosition = {
+    x: 0,
+    y: 0,
+    // Override X/Y with user input
+    ...initialPosition,
+    width: 2,
+    height: 2,
+  };
+  // Create arrays for all grid positions and mark all as unused for now
+  const freeSlots = generateSlots(blocks);
 
   // Find first y and see if it works
   let found = false;
@@ -134,13 +101,12 @@ const generateCoordinates = (blocks) => {
     if (!found) {
       // Go through the row and see if any item is true
       const indexFound = row.findIndex((item) => item === true);
-      console.log('did we find an index?', index, indexFound);
       // If we got it, and it's within the width
       // Make it the new position
-      // @TODO: Check if on bottom, and make height 1
       if (!(indexFound < 0) && indexFound <= 16) {
         found = true;
-        // @TODO check adjacent slots and see if also free
+        // Check adjacent slots and see if also free
+        // Make width/height smaller if necessary
         const newSize = checkAdjacentSlots(
           currentSlots,
           indexFound,
@@ -148,7 +114,6 @@ const generateCoordinates = (blocks) => {
           2,
           2
         );
-        console.log('returning something', index, indexFound);
         startPosition = {
           ...startPosition,
           x: indexFound,
@@ -158,18 +123,6 @@ const generateCoordinates = (blocks) => {
       }
     }
   });
-  console.log('free slots', freeSlots, startPosition);
-  // if (firstY !== null && firstY + startPosition.height <= 8) {
-  //   startPosition = {
-  //     ...startPosition,
-  //     y: firstY,
-  //   };
-  // } else {
-  //   throw new Error('No free slots vertically');
-  // }
-
-  // console.log('updated free positions', freeXSlots, freeYSlots);
-  // console.log('new position', startPosition);
   return startPosition;
 };
 
