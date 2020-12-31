@@ -32,17 +32,15 @@ const checkAdjacentSlots = (freeSlots, x, y, width, height) => {
   let foundHeight = false;
   let finalWidth = 0;
   let finalHeight = 0;
-
-  // @TODO: Check if X/Y + Width/Height exceeds grid max, reduce width/height from there
-
-  console.log('initial w/h', x, y, finalWidth, finalHeight);
+  const initialWidth = x + width > 16 ? x + width - 16 - width : width;
+  const initialHeight = y + height > 8 ? y + height - 8 - height : height;
 
   // Loop through all X and Y slots
   // Reduce width and height to first filled slot
   // (cause we can't have blocks overlap gaps)
-  [...Array(width)].forEach((item, xIndex) => {
+  [...Array(initialWidth)].forEach((item, xIndex) => {
     if (!foundWidth) finalWidth += 1;
-    [...Array(height - 1)].forEach((_, yIndex) => {
+    [...Array(initialHeight - 1)].forEach((_, yIndex) => {
       if (!foundHeight) finalHeight += 1;
       if (!freeSlots[yIndex + y][xIndex + x]) {
         foundHeight = true;
