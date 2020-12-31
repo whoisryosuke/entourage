@@ -23,6 +23,56 @@ import { BLOCK_TYPES, BLOCK_SAMPLES } from '../../constants/blocks';
 
 interface Props {}
 
+/**
+ * Checks if item intersects with any objects in grid
+ * Returns a reduced width and height if intersection
+ */
+const checkAdjacentSlots = (freeSlots, x, y, width, height) => {
+  let foundWidth = false;
+  let foundHeight = false;
+  let finalWidth = 0;
+  let finalHeight = 0;
+
+  // @TODO: Check if X/Y + Width/Height exceeds grid max, reduce width/height from there
+
+  console.log('initial w/h', x, y, finalWidth, finalHeight);
+
+  // Loop through all X and Y slots
+  // Reduce width and height to first filled slot
+  // (cause we can't have blocks overlap gaps)
+  [...Array(width)].forEach((item, xIndex) => {
+    if (!foundWidth) finalWidth += 1;
+    [...Array(height - 1)].forEach((_, yIndex) => {
+      if (!foundHeight) finalHeight += 1;
+      if (!freeSlots[yIndex + y][xIndex + x]) {
+        foundHeight = true;
+        foundWidth = true;
+      }
+    });
+  });
+  // for (let xIndex = x; xIndex <= x + (width - 1); xIndex + 1) {
+  //   console.log('looping x', finalWidth);
+
+  //   // Loop through all Y slots
+  //   // for (let yIndex = y; yIndex < y + (height - 1); yIndex + 1) {
+  //   //   finalHeight += 1;
+  //   //   console.log('looping y', finalHeight);
+  //   //   if (!foundHeight && !freeSlots[yIndex][xIndex]) {
+  //   //     foundHeight = true;
+  //   //     foundWidth = true;
+  //   //   }
+  //   // }
+  //   if (foundWidth && foundHeight) break;
+  // }
+
+  console.log('final w/h', finalWidth, finalHeight);
+
+  return {
+    width: finalWidth,
+    height: finalHeight,
+  };
+};
+
 const generateCoordinates = (blocks) => {
   let startPosition = {
     x: 0,
@@ -82,7 +132,7 @@ const generateCoordinates = (blocks) => {
 
   // Find first y and see if it works
   let found = false;
-  freeSlots.forEach((row, index) => {
+  freeSlots.forEach((row, index, currentSlots) => {
     if (!found) {
       // Go through the row and see if any item is true
       const indexFound = row.findIndex((item) => item === true);
@@ -92,11 +142,20 @@ const generateCoordinates = (blocks) => {
       // @TODO: Check if on bottom, and make height 1
       if (!(indexFound < 0) && indexFound <= 16) {
         found = true;
+        // @TODO check adjacent slots and see if also free
+        const newSize = checkAdjacentSlots(
+          currentSlots,
+          indexFound,
+          index,
+          2,
+          2
+        );
         console.log('returning something', index, indexFound);
         startPosition = {
           ...startPosition,
           x: indexFound,
           y: index,
+          ...newSize,
         };
       }
     }

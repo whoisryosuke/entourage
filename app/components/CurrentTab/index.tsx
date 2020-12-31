@@ -118,10 +118,11 @@ export const CurrentTab = (props: Props) => {
       />
 
       {/* Blocks */}
-      {tab?.blocks.map(({ name, position }) => (
+      {tab?.blocks.map(({ name, position }, index) => (
         <Block
           key={name}
           name={name}
+          index={index}
           width={gridItemSize.width * position.width}
           height={gridItemSize.height * position.height}
           top={gridItemSize.height * position.y}

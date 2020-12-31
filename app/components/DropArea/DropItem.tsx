@@ -20,7 +20,7 @@ export const DropItem = ({
 }: Props) => {
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: DRAG_TYPES.BLOCK,
-    drop: () => ({ name: 'Tab' }),
+    drop: () => ({ name: 'Tab', row, index }),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),

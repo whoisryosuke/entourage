@@ -69,6 +69,25 @@ const currentSlice = createSlice({
         ...state.tabs.slice(0),
       ];
     },
+    updateBlockPosition: (state, action) => {
+      state.tabs = [
+        {
+          ...state.tabs[0],
+          blocks: [
+            ...state.tabs[0].blocks.slice(0, action.payload.index),
+            {
+              ...state.tabs[0].blocks[action.payload.index],
+              position: {
+                ...state.tabs[0].blocks[action.payload.index]?.position,
+                ...action.payload.position,
+              },
+            },
+            ...state.tabs[0].blocks.slice(action.payload.index + 1),
+          ],
+        },
+        ...state.tabs.slice(0),
+      ];
+    },
   },
 });
 
@@ -77,6 +96,7 @@ export const {
   updateTabs,
   toggleEditMode,
   addBlockToTab,
+  updateBlockPosition,
 } = currentSlice.actions;
 
 export default currentSlice.reducer;
