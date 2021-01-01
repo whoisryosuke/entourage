@@ -34,16 +34,21 @@ export const BLOCK_SAMPLES = {
   },
   todo: {
     type: BLOCK_TYPES.TODO,
-    data: [
-      {
-        name: 'Test todo',
-        checked: false,
-      },
-    ],
+    data: {
+      todos: [
+        {
+          name: 'Test todo',
+          checked: false,
+        },
+      ],
+    },
   },
   note: {
     type: BLOCK_TYPES.NOTE,
-    data: 'Hello Note World',
+    data: {
+      format: 'plaintext',
+      note: 'Hello Note World',
+    },
   },
 };
 
