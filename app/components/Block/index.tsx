@@ -21,6 +21,9 @@ interface Props {
   left: number;
   index: number;
   freeSlots: any;
+  // @TODO: React dispatch state
+  setEditBlockId: any;
+  openDrawer: any;
   children: React.ReactNode;
 }
 
@@ -33,6 +36,8 @@ export const Block = ({
   index,
   top,
   left,
+  setEditBlockId,
+  openDrawer,
   children,
   freeSlots,
   ...restProps
@@ -77,6 +82,11 @@ export const Block = ({
     }),
   });
 
+  const handleEdit = () => {
+    setEditBlockId(index);
+    openDrawer();
+  };
+
   const opacity = isDragging ? 0.4 : 1;
   return (
     <Box
@@ -91,6 +101,18 @@ export const Block = ({
       border="1px solid gray.500"
       {...restProps}
     >
+      {editMode && (
+        <Box
+          position="absolute"
+          top="0"
+          right="0"
+          onClick={handleEdit}
+          bg="gray.100"
+          p={2}
+        >
+          Edit mode
+        </Box>
+      )}
       {children}
     </Box>
   );

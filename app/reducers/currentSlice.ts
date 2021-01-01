@@ -66,7 +66,7 @@ const currentSlice = createSlice({
           ...state.tabs[0],
           blocks: [...state.tabs[0].blocks, action.payload],
         },
-        ...state.tabs.slice(0),
+        ...state.tabs.slice(1),
       ];
     },
     updateBlockPosition: (state, action) => {
@@ -88,6 +88,12 @@ const currentSlice = createSlice({
         ...state.tabs.slice(0),
       ];
     },
+    updateBlockAction: (state, action) => {
+      console.log('updating block', state.tabs, action);
+      state.tabs[0].blocks[action.payload.index].action.data[
+        action.payload.label
+      ] = action.payload.data;
+    },
   },
 });
 
@@ -97,6 +103,7 @@ export const {
   toggleEditMode,
   addBlockToTab,
   updateBlockPosition,
+  updateBlockAction,
 } = currentSlice.actions;
 
 export default currentSlice.reducer;

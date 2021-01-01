@@ -1,15 +1,19 @@
 import React, { useCallback, useRef, useState, useLayoutEffect } from 'react';
-import { Box, Button, Text } from '@chakra-ui/react';
+import { Box, Button, Text, useDisclosure } from '@chakra-ui/react';
+
 import { useSelector } from 'react-redux';
 import { selectCurrentTab } from '../../reducers/currentSlice';
 import { DropArea } from '../DropArea';
 import { Block } from '../Block';
 import { generateSlots } from '../AddBlockMenu';
 import { BlockContent } from '../BlockContent';
+import { BlockEditDrawer } from '../BlockEditDrawer';
 
 interface Props {}
 
 export const CurrentTab = (props: Props) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [editBlockId, setEditBlockId] = useState(0);
   const [gridItemSize, setGridItemSize] = useState({
     width: 0,
     height: 0,
@@ -62,11 +66,22 @@ export const CurrentTab = (props: Props) => {
             top={gridItemSize.height * position.y}
             left={gridItemSize.width * position.x}
             freeSlots={freeSlots}
+            openDrawer={onOpen}
+            setEditBlockId={setEditBlockId}
           >
             <BlockContent name={name} action={action} />
           </Block>
         );
       })}
+
+      {tab?.blocks && tab.blocks.length > 0 && (
+        <BlockEditDrawer
+          isOpen={isOpen}
+          onClose={onClose}
+          selectedBlock={tab.blocks[editBlockId]}
+          editBlockId={editBlockId}
+        />
+      )}
     </Box>
   );
 };

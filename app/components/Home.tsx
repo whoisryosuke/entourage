@@ -74,17 +74,6 @@ export default function Home(): React.ReactNode {
 
     console.log('json data', data);
   });
-  // exec('ls -la', (error, stdout, stderr) => {
-  //   if (error) {
-  //     console.log(`error: ${error.message}`);
-  //     return;
-  //   }
-  //   if (stderr) {
-  //     console.log(`stderr: ${stderr}`);
-  //     return;
-  //   }
-  //   console.log(`stdout: ${stdout}`);
-  // });
   return (
     <div data-tid="container">
       <Header />
