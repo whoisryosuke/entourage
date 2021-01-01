@@ -4,6 +4,7 @@ import { CommandBlock } from './CommandBlock';
 import { BookmarkBlock } from './BookmarkBlock';
 import { NoteBlock } from './NoteBlock';
 import { TodoBlock } from './TodoBlock';
+import { ImageBlock } from './ImageBlock';
 
 interface Props {
   action: Block['action'];
@@ -20,6 +21,8 @@ export const BlockContent = ({ action }: Props) => {
       return <NoteBlock action={action} />;
     case 'todo':
       return <TodoBlock action={action} />;
+    case 'image':
+      return <ImageBlock action={action} />;
 
     default:
       return <div>No block found with that type.</div>;

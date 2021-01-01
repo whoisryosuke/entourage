@@ -1,10 +1,14 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Box } from '@chakra-ui/react';
 import { useDrag, DragSourceMonitor } from 'react-dnd';
+import {
+  selectEditMode,
+  updateBlockPosition,
+} from '../../reducers/currentSlice';
 import { DRAG_TYPES } from '../../constants/blocks';
-import { updateBlockPosition } from '../../reducers/currentSlice';
+
 import { checkAdjacentSlots } from '../AddBlockMenu';
 
 interface Props {
@@ -33,6 +37,7 @@ export const Block = ({
   freeSlots,
   ...restProps
 }: Props) => {
+  const editMode = useSelector(selectEditMode);
   const dispatch = useDispatch();
   const [{ isDragging }, drag] = useDrag({
     item: { name, type: DRAG_TYPES.BLOCK },
@@ -75,7 +80,7 @@ export const Block = ({
   const opacity = isDragging ? 0.4 : 1;
   return (
     <Box
-      ref={drag}
+      ref={editMode ? drag : null}
       position="absolute"
       width={width}
       height={height}
