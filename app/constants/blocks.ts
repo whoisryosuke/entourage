@@ -28,6 +28,7 @@ export const BLOCK_SAMPLES = {
   bookmark: {
     type: BLOCK_TYPES.BOOKMARK,
     data: {
+      name: 'Google',
       url: 'https://google.com/',
     },
   },

@@ -1,4 +1,5 @@
 import React from 'react';
+import { shell } from 'electron';
 import { Block } from '../../reducers/currentSlice';
 
 interface Props {
@@ -6,7 +7,18 @@ interface Props {
 }
 
 export const BookmarkBlock = ({ action }: Props) => {
-  return <div>{action.type}</div>;
+  const handleButton = () => {
+    shell.openExternal(action.data.url);
+  };
+  return (
+    <button
+      type="button"
+      title="Open webpage in browser"
+      onClick={handleButton}
+    >
+      {action.data.name}
+    </button>
+  );
 };
 
 export default BookmarkBlock;
