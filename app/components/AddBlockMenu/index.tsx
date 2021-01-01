@@ -136,7 +136,9 @@ export const AddBlockMenu = (props: Props) => {
       addBlockToTab({
         name: 'Execute Command',
         description: 'A sample command',
-        action: BLOCK_SAMPLES[blockType],
+        action: {
+          ...BLOCK_SAMPLES[blockType],
+        },
         position: {
           ...coordinates,
         },

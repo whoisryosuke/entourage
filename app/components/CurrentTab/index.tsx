@@ -2,9 +2,10 @@ import React, { useCallback, useRef, useState, useLayoutEffect } from 'react';
 import { Box, Button, Text } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 import { selectCurrentTab } from '../../reducers/currentSlice';
-import DropArea from '../DropArea';
-import Block from '../Block';
+import { DropArea } from '../DropArea';
+import { Block } from '../Block';
 import { generateSlots } from '../AddBlockMenu';
+import { BlockContent } from '../BlockContent';
 
 interface Props {}
 
@@ -48,22 +49,24 @@ export const CurrentTab = (props: Props) => {
       />
 
       {/* Blocks */}
-      {tab?.blocks.map(({ name, position }, index) => (
-        <Block
-          key={name}
-          name={name}
-          index={index}
-          gridWidth={position.width}
-          gridHeight={position.height}
-          width={gridItemSize.width * position.width}
-          height={gridItemSize.height * position.height}
-          top={gridItemSize.height * position.y}
-          left={gridItemSize.width * position.x}
-          freeSlots={freeSlots}
-        >
-          <Text>{name}</Text>
-        </Block>
-      ))}
+      {tab?.blocks.map(({ name, position, action }, index) => {
+        return (
+          <Block
+            key={name}
+            name={name}
+            index={index}
+            gridWidth={position.width}
+            gridHeight={position.height}
+            width={gridItemSize.width * position.width}
+            height={gridItemSize.height * position.height}
+            top={gridItemSize.height * position.y}
+            left={gridItemSize.width * position.x}
+            freeSlots={freeSlots}
+          >
+            <BlockContent name={name} action={action} />
+          </Block>
+        );
+      })}
     </Box>
   );
 };

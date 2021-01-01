@@ -9,7 +9,7 @@ export const BLOCK_TYPES = {
 };
 
 export const BLOCK_SAMPLES = {
-  COMMAND: {
+  command: {
     type: BLOCK_TYPES.COMMAND,
     data: {
       commands: ['ls -la'],
@@ -17,21 +17,21 @@ export const BLOCK_SAMPLES = {
     },
     directory: '',
   },
-  FILE: {
+  file: {
     type: BLOCK_TYPES.FILE,
     directory: '',
   },
-  IMAGE: {
+  image: {
     type: BLOCK_TYPES.IMAGE,
     directory: '',
   },
-  BOOKMARK: {
+  bookmark: {
     type: BLOCK_TYPES.BOOKMARK,
     data: {
       url: 'https://google.com/',
     },
   },
-  TODO: {
+  todo: {
     type: BLOCK_TYPES.TODO,
     data: [
       {
@@ -40,7 +40,7 @@ export const BLOCK_SAMPLES = {
       },
     ],
   },
-  NOTE: {
+  note: {
     type: BLOCK_TYPES.NOTE,
     data: 'Hello Note World',
   },
